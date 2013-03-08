@@ -29,8 +29,8 @@ public class TalkNetManager {
         
         // create config
         config = new ConnectionConfiguration(server, port);
-     //   config.setSASLAuthenticationEnabled(false);			//for testing
-   //     config.setSecurityMode(SecurityMode.disabled);		//for testing
+        config.setSASLAuthenticationEnabled(false);			//for testing
+        config.setSecurityMode(SecurityMode.disabled);		//for testing
         
         connection = new XMPPConnection(config);
         connection.connect();								//create connection
