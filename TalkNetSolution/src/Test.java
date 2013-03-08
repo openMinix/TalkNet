@@ -6,10 +6,10 @@ public class Test {
 	
     public static void main(String[] args) throws Exception {
         
-        String username = "alex2";
-        String password = "test";
+        String username = "vlad";
+        String password = "123456";
         
-        TalkNetManager xmppManager = new  TalkNetManager("127.0.0.1", 5222);
+        TalkNetManager xmppManager = new  TalkNetManager("projects.rosedu.org", 5222);
         
         xmppManager.init();
         xmppManager.loginCredentials(username, password);

@@ -1,0 +1,13 @@
+!SESSION 2013-03-09 00:20:57.168 -----------------------------------------------
+eclipse.buildId=I20120608-1400
+java.version=1.7.0_15
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.java.product
+Command-line arguments:  -os linux -ws gtk -arch x86_64 -product org.eclipse.epp.package.java.product
+
+!ENTRY com.google.gdt.eclipse.suite 1 0 2013-03-09 00:24:25.854
+!MESSAGE Registering: com.google.appengine.eclipse.sdkbundle_1.7.1
+
+!ENTRY com.google.gdt.eclipse.suite 1 0 2013-03-09 00:24:26.591
+!MESSAGE Registering: com.google.gwt.eclipse.sdkbundle_2.4.0.v201208080121-rel-r42
