@@ -6,7 +6,7 @@ public class Test {
 	
     public static void main(String[] args) throws Exception {
         
-        String username = "vlad";
+        String username = "alex";
         String password = "123456";
         
         TalkNetManager xmppManager = new  TalkNetManager("projects.rosedu.org", 5222);
