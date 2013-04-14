@@ -1,26 +1,25 @@
+import client.Entities.*;
+
 public class Test {
     
-	/* Simple class for testing a connection and login to server 
-	 * !!! (username and password) must be created before
+	/*
+	 * simple class Test
 	 */
 	
     public static void main(String[] args) throws Exception {
+                
+    	//creates a connection with server
+    	ConnectionManager cm = new ConnectionManager();
+    	Register rm = new Register("usertest", "123456");
+        Login login = new Login();
+        login.loginCredentials("usertest", "123456");
+     
+        //wait logged in 10 s
+        Thread.sleep(10000);
         
-        String username = "alex";
-        String password = "123456";
+        //bye bye
+        Logout logout = new Logout();
+        logout.destroy();
         
-        TalkNetManager xmppManager = new  TalkNetManager("projects.rosedu.org", 5222);
-        
-        xmppManager.init();
-        xmppManager.loginCredentials(username, password);
-        xmppManager.setStatus(true, "Hello everyone");
-        
-        
-        while (true) {					//go to Sessions and
-        	if( 4 == 5)					//user alex2 should be Authenticated 
-        		break;
-        }
-        
-        xmppManager.destroy();
     }
 }
