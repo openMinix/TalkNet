@@ -10,7 +10,7 @@ import client.Utils.Parameters;
 public class ConnectionManager {
 	
 	private ConnectionConfiguration config;		//configuration of the connection attributes
-    static public XMPPConnection connection;			//xmpp connection with server
+	static public XMPPConnection connection;			//xmpp connection with server
 	
 	private Register reg;
 	private Login login;
