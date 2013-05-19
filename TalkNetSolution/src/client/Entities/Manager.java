@@ -14,6 +14,7 @@ import org.jivesoftware.smackx.muc.MultiUserChat;
 import client.Windows.ChatFrame;
 
 
+//alext - manager between display, and backend
 public class Manager {
 
 	private ChatManager chatManager;
@@ -23,10 +24,10 @@ public class Manager {
 	public HashMap<String, ChatFrame> chatWindows = null;
 	private int nr_friends;
 
-	//manager singleton
+	//alext - manager singleton
 	private static Manager instance = null;
 	private Manager() {
-		//defeat instances
+		//alext - defeat instances
 		roster = ConnectionManager.connection.getRoster();
 		chatManager = ConnectionManager.connection.getChatManager();
 		messageListener = new ChatListener();
@@ -36,6 +37,7 @@ public class Manager {
 		nr_friends = 0;
 	}
 	
+	//alext - return always the same instance
 	public static Manager getManager() {
 		if ( instance == null ) {
 			instance = new Manager();
@@ -45,7 +47,7 @@ public class Manager {
 			return instance;
 	}
 	
-	//maybe called on event ????
+	//alext - maybe called on event ????
 	
 	public void setStatus(boolean avaiable, String status) {
 		
@@ -60,6 +62,7 @@ public class Manager {
 		ConnectionManager.connection.sendPacket(presence);
 	}
 	
+	//alext - add user in roster's user authed
 	public void createEntry(String user, String name ) {
 		try {
 			if ( roster == null )
@@ -71,6 +74,7 @@ public class Manager {
 		}
 	}
 	
+	//alext - send a message to toBuddy
 	public void sendMessage(String message, String toBuddy) {
 		try {
 			/*
@@ -88,6 +92,8 @@ public class Manager {
 		}
 	}
 	
+	//alext - return friends of user authed
+	//alext - TODO - bind with roster
 	public String[] getFriends() {
 		String[] myData = new String[nr_friends+1];
 		for ( int i = 0 ; i < nr_friends ; i ++ )
@@ -96,13 +102,14 @@ public class Manager {
 		return myData;
 	}
 	
+	//alext - TODO - bind with roster
 	public void addFriend( String name ) {
 		System.out.println("add: " + name);
 		this.data[nr_friends] = name;
 		nr_friends ++;
 	}
 	
-	// alext  - trebuie implementata
+	// alext  - TODO - bind with roster
 	public void deleteFriend (String name ) {
 		int pos = -1;
 		for (int i = 0 ; i < nr_friends ; i ++)  {
@@ -116,6 +123,8 @@ public class Manager {
 		data[nr_friends] = null;
 	}
 	
+	//alext - very important
+	//alext - clean resources before login after logout
 	public void clean() {
 		roster = ConnectionManager.connection.getRoster();
 		chatManager = ConnectionManager.connection.getChatManager();
