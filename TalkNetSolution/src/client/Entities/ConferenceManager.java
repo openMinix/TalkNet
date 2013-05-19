@@ -1,10 +1,12 @@
 package client.Entities;
 
 import org.jivesoftware.smackx.muc.*;
+import org.jivesoftware.smackx.Form;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.Connection;
-import org.jivesoftware.smack.packet.Message;
+import org.jivesoftware.smack.packet.*;
+import org.jivesoftware.smack.*;
 
 public class ConferenceManager {
 
@@ -17,19 +19,18 @@ public class ConferenceManager {
 		 */
 		muc = new MultiUserChat(ConnectionManager.connection, roomName);
 		/* Listen for invitations. */
-		MultiUserChat.addInvitationListener(ConnectionManager.connection, new InvitationListener()
-			{
-				public void invitationReceived(Connection conn, String room, String inviter, String reason, String password, Message message) {
-					// Reject the invitation
-					System.out.println("Received invitation from user " + inviter);
-					MultiUserChat.decline(conn, room, inviter, "I'm busy right now");
-				}
-			});
+		muc.addMessageListener(new PacketListener() {
+			public void processPacket(Packet packet) {
+				Message message = muc.nextMessage();
+				System.out.println(message.getBody());
+			}
+		}); 
 	}
 	
 	public void createRoom(String username) {
 		try {
 			muc.create(username);
+			muc.sendConfigurationForm(new Form(Form.TYPE_SUBMIT));
 		}
 		catch (XMPPException e) {
 			System.out.println("Manager.Exception: " + e.toString());
@@ -40,4 +41,21 @@ public class ConferenceManager {
 		muc.invite(user, reason);	
 	}
 	
+	public void joinRoom(String username) {
+		try {
+			muc.join(username);
+		}
+		catch (XMPPException e) {
+			System.out.println("Join Exception: " + e.toString());
+		}
+	}
+	
+	public void sendMessage(String message) {
+		try {
+			muc.sendMessage(message);
+		}
+		catch (XMPPException e) {
+			System.out.println("Send Message Exception: " + e.toString());
+		}
+	}
 }
