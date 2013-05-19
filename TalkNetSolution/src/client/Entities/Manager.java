@@ -1,5 +1,7 @@
 package client.Entities;
 
+import java.util.HashMap;
+
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.ChatManager;
 import org.jivesoftware.smack.ChatManagerListener;
@@ -7,6 +9,9 @@ import org.jivesoftware.smack.MessageListener;
 import org.jivesoftware.smack.Roster;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Presence;
+import org.jivesoftware.smackx.muc.MultiUserChat;
+
+import client.Windows.ChatFrame;
 
 
 public class Manager {
@@ -14,7 +19,9 @@ public class Manager {
 	private ChatManager chatManager;
 	private ChatManagerListener messageListener;
 	private Roster roster;
-	
+	public String data[] = null;
+	public HashMap<String, ChatFrame> chatWindows = null;
+	private int nr_friends;
 
 	//manager singleton
 	private static Manager instance = null;
@@ -23,12 +30,17 @@ public class Manager {
 		roster = ConnectionManager.connection.getRoster();
 		chatManager = ConnectionManager.connection.getChatManager();
 		messageListener = new ChatListener();
-		chatManager.addChatListener(messageListener);	
+		chatManager.addChatListener(messageListener);
+		chatWindows = new HashMap<String, ChatFrame>();
+		data = new String[10000];//fail
+		nr_friends = 0;
 	}
 	
 	public static Manager getManager() {
-		if ( instance == null )
-			return new Manager();
+		if ( instance == null ) {
+			instance = new Manager();
+			return instance;
+		}
 		else
 			return instance;
 	}
@@ -36,6 +48,7 @@ public class Manager {
 	//maybe called on event ????
 	
 	public void setStatus(boolean avaiable, String status) {
+		
 		Presence.Type type;
 		if ( avaiable )
 			type = Presence.Type.available;
@@ -49,10 +62,12 @@ public class Manager {
 	
 	public void createEntry(String user, String name ) {
 		try {
+			if ( roster == null )
+				System.out.println("mortii matii");
 			roster.createEntry(user, name, null);
 		}
 		catch (Exception e) {
-			System.out.println("Manager.Exception: " + e.toString());
+			System.out.println("Manager.Exception.createEntry: " + e.toString());
 		}
 	}
 	
@@ -71,6 +86,44 @@ public class Manager {
 		catch (Exception e) {
 			System.out.println("Manager.sendMessage: " + e.toString());
 		}
+	}
+	
+	public String[] getFriends() {
+		String[] myData = new String[nr_friends+1];
+		for ( int i = 0 ; i < nr_friends ; i ++ )
+			myData[i] = data[i];
+		myData[nr_friends] = null;
+		return myData;
+	}
+	
+	public void addFriend( String name ) {
+		System.out.println("add: " + name);
+		this.data[nr_friends] = name;
+		nr_friends ++;
+	}
+	
+	// alext  - trebuie implementata
+	public void deleteFriend (String name ) {
+		int pos = -1;
+		for (int i = 0 ; i < nr_friends ; i ++)  {
+			if ( name.compareTo(data[i]) == 0 ) {
+				pos = i;
+			}
+		}
+		for ( int i = pos ; i < nr_friends - 1; i ++)
+			data[i] = data[i+1];
+		nr_friends--;
+		data[nr_friends] = null;
+	}
+	
+	public void clean() {
+		roster = ConnectionManager.connection.getRoster();
+		chatManager = ConnectionManager.connection.getChatManager();
+		messageListener = new ChatListener();
+		chatManager.addChatListener(messageListener);
+		chatWindows = new HashMap<String, ChatFrame>();
+		data = new String[10000];//fail
+		nr_friends = 0;
 	}
 	
 }

@@ -6,12 +6,12 @@ public class Test {
 	/*
 	 * simple class Test
 	 */
-	
+	/*
     public static void main(String[] args) throws Exception {
                 
     	//creates a connection with server
     	ConnectionManager cm = new ConnectionManager();
-    	//Register rm = new Register("usertest2", "123456");
+    	Register rm = new Register("usertest2", "123456");
         Login login1 = new Login();
         login1.loginCredentials("usertest1", "123456");
         
@@ -34,4 +34,5 @@ public class Test {
         logout.destroy();
         
     }
+    */
 }
