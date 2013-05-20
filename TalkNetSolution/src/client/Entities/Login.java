@@ -9,6 +9,7 @@ import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.packet.Presence.Type;
 
 
+//alext - login user to server
 public class Login {
 	
         

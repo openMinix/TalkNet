@@ -8,6 +8,7 @@ import org.jivesoftware.smack.packet.Message;
 import client.Client.Main;
 import client.Windows.ChatFrame;
 
+//alext - listen message from network
 public class ChatListener implements ChatManagerListener {
 
 	@Override
@@ -15,6 +16,7 @@ public class ChatListener implements ChatManagerListener {
 		// TODO Auto-generated method stub
 		chat.addMessageListener(new MessageListener()
 	      {
+			//alext - process a message for network
 	        public void processMessage(Chat chat1, Message message)
 	        {
 	          System.out.println("Received message: " 
@@ -31,9 +33,6 @@ public class ChatListener implements ChatManagerListener {
 	              Manager.getManager().chatWindows.put(from, fr);
 	              fr.displayMessage(from, message.getBody());
 	          }
-	        	  
-	          
-	          //Main.chatFrame.displayMessage(from, message.getBody());
 	        }
 	      });
 	}

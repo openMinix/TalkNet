@@ -7,6 +7,7 @@ import org.jivesoftware.smack.SmackConfiguration;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.ConnectionConfiguration.SecurityMode;
 	
+//alext - regiser new user to server
 public class Register {
 
 	AccountManager am;

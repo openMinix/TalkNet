@@ -7,6 +7,7 @@ import org.jivesoftware.smack.ConnectionConfiguration.SecurityMode;
 
 import client.Utils.Parameters;
 
+//alext - create connection to server
 public class ConnectionManager {
 	
 	private ConnectionConfiguration config;		//configuration of the connection attributes
