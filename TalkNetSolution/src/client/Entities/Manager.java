@@ -13,8 +13,10 @@ import org.jivesoftware.smack.Roster;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Presence;
+import org.jivesoftware.smackx.filetransfer.FileTransfer;
 import org.jivesoftware.smackx.filetransfer.FileTransfer.Status;
 import org.jivesoftware.smackx.filetransfer.FileTransferManager;
+import org.jivesoftware.smackx.filetransfer.FileTransferNegotiator;
 import org.jivesoftware.smackx.filetransfer.OutgoingFileTransfer;
 import org.jivesoftware.smackx.muc.MultiUserChat;
 
@@ -43,6 +45,7 @@ public class Manager {
 		chatManager.addChatListener(messageListener);
 		
 		transferManager = new FileTransferManager( ConnectionManager.connection );
+		FileTransferNegotiator.setServiceEnabled(ConnectionManager.connection, true);
 		transferListener = new TransferListener();
 		transferManager.addFileTransferListener( transferListener );
 		
@@ -113,15 +116,12 @@ public class Manager {
 		
 	      // Send the file
 	    try {
+	    	System.out.println("Sunt " +FileTransferNegotiator.isServiceEnabled(ConnectionManager.connection));
+	    	System.out.println("Voi transfera!");
 			transfer.sendFile(file, "You won't believe this!");
-			int n= JOptionPane.showConfirmDialog(
-				    null,
-				    "Would you like to receive file?",
-				    "Incoming file!",
-				    JOptionPane.YES_NO_OPTION);
-			System.out.println("Am aparut lala " + n);
+			
 			  while(!transfer.isDone()) {
-		            if(transfer.getStatus().equals(Status.error)) {
+		            if(transfer.getStatus().equals(FileTransfer.Status.error)) {
 		                  System.out.println("ERROR!!! " + transfer.getError());
 		            } else {
 		                  System.out.println(transfer.getStatus());

@@ -165,7 +165,6 @@ class SendFileListener implements ActionListener {
     public void actionPerformed(ActionEvent e)
     {
     	
-    	File dir=new File(".");
     	JFileChooser jfc=new JFileChooser(".");
     	jfc.setDialogTitle("Choose a file");
     	parentFrame.add(jfc);
@@ -176,11 +175,11 @@ class SendFileListener implements ActionListener {
     	if (returnValue == JFileChooser.APPROVE_OPTION) {
     		selectedFile = jfc.getSelectedFile();
     		
-    		System.out.println("Am selectat" + selectedFile);
+    		System.out.println("Am selectat" + selectedFile + "si trimit la " + parentFrame.friendID );
     		    		
     		Manager manager = Manager.getManager();
     	      // Create the outgoing file transfer
-    	    manager.sendFile( selectedFile,parentFrame.friendID + "@127.0.0.1/Spark 2.6.3");
+    	    manager.sendFile( selectedFile,parentFrame.friendID + "@127.0.0.1/Smack");
     	    
     	}	
                 //Execute when button is pressed

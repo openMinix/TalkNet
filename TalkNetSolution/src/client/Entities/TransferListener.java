@@ -33,15 +33,17 @@ public class TransferListener implements FileTransferListener {
 			    "Incoming file!",
 			    JOptionPane.YES_NO_OPTION);
 		
+	
 		File recvFile = null;
 		
 		if ( n == JOptionPane.YES_OPTION)
 		{
+			
 	    	JFileChooser jfc=new JFileChooser(".");
 	    	jfc.setDialogTitle("Choose a file to receive file");
-	    	parentFrame.add(jfc);
+	   
 	    	jfc.setVisible(true);
-	    	
+	    
 	    	int returnValue = jfc.showOpenDialog( parentFrame);
 	    	
 	    	if (returnValue == JFileChooser.APPROVE_OPTION) {
@@ -61,10 +63,13 @@ public class TransferListener implements FileTransferListener {
 		
 		File recvFile = ShouldTransfer(request);
 		
+		System.out.println("Am terminat acceptare");
+		
         if( recvFile != null ) {
               // Accept it
               IncomingFileTransfer transfer = request.accept();
               try {
+          		System.out.println("Ajung sa primesc");
 				transfer.recieveFile( recvFile );
 			} catch (XMPPException e) {
 				System.out.println("Error on receive:" + e.toString());
@@ -73,7 +78,7 @@ public class TransferListener implements FileTransferListener {
         } else {
               // Reject it
         	System.out.println("Rject pe cerere");
-              request.reject();
+        	request.reject();
         }
 	}
 
