@@ -1,20 +1,22 @@
 package client.Entities;
 
+import java.awt.Toolkit; 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.HashMap;
 
-import javax.swing.JOptionPane;
+
+import javax.swing.ProgressMonitor;
 
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.ChatManager;
 import org.jivesoftware.smack.ChatManagerListener;
-import org.jivesoftware.smack.MessageListener;
 import org.jivesoftware.smack.Roster;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Presence;
-import org.jivesoftware.smackx.filetransfer.FileTransfer;
-import org.jivesoftware.smackx.filetransfer.FileTransfer.Status;
+
 import org.jivesoftware.smackx.filetransfer.FileTransferManager;
 import org.jivesoftware.smackx.filetransfer.FileTransferNegotiator;
 import org.jivesoftware.smackx.filetransfer.OutgoingFileTransfer;
@@ -23,8 +25,9 @@ import org.jivesoftware.smackx.muc.MultiUserChat;
 import client.Windows.ChatFrame;
 
 
+
 //alext - manager between display, and backend
-public class Manager {
+public class Manager implements PropertyChangeListener  {
 
 	private ChatManager chatManager;
 	private ChatManagerListener messageListener;
@@ -34,6 +37,11 @@ public class Manager {
 	public String data[] = null;
 	public HashMap<String, ChatFrame> chatWindows = null;
 	private int nr_friends;
+	private ProgressMonitor progressMonitor;
+
+	
+	private ProgressTask task;
+	 
 
 	//alext - manager singleton
 	private static Manager instance = null;
@@ -116,30 +124,47 @@ public class Manager {
 		
 	      // Send the file
 	    try {
-	    	System.out.println("Sunt " +FileTransferNegotiator.isServiceEnabled(ConnectionManager.connection));
-	    	System.out.println("Voi transfera!");
-			transfer.sendFile(file, "You won't believe this!");
+	    		System.out.println("Sunt " +FileTransferNegotiator.isServiceEnabled(ConnectionManager.connection));
+	    		System.out.println("Voi transfera!");
+	    		transfer.sendFile(file, "You won't believe this!");
 			
-			  while(!transfer.isDone()) {
-		            if(transfer.getStatus().equals(FileTransfer.Status.error)) {
-		                  System.out.println("ERROR!!! " + transfer.getError());
-		            } else {
-		                  System.out.println(transfer.getStatus());
-		                  System.out.println(transfer.getProgress());
-		            }
-		            try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-		      }
+	    		 progressMonitor = new ProgressMonitor( null,
+                         "Sending file ...",
+                         "", 0, 100);
+	    		 
+	    		 progressMonitor.setProgress(0);
+	    		 task = new ProgressTask( transfer );
+	    		 task.addPropertyChangeListener(this);
+	    		 task.execute();
+	    		 
+	    		
 		} catch (XMPPException e) {
 			System.out.println("Send file exception." + e.toString());
 			e.printStackTrace();
 		}
 
 	}
+	
+	public void propertyChange(PropertyChangeEvent evt) {
+        if ("progress" == evt.getPropertyName() ) {
+            int progress = (Integer) evt.getNewValue();
+            progressMonitor.setProgress(progress);
+            String message =
+            		String.format("Completed %d%%.\n", progress);
+            progressMonitor.setNote(message);
+            
+            if (progressMonitor.isCanceled() || task.isDone()) {
+                Toolkit.getDefaultToolkit().beep();
+                if (progressMonitor.isCanceled()) {
+                    task.cancel(true);
+            
+                } else {
+            
+                }
+            }
+        }
+    }
+ 
 	
 	//alext - return friends of user authed
 	//alext - TODO - bind with roster

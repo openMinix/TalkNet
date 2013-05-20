@@ -1,9 +1,13 @@
 package client.Entities;
 
+import java.awt.Toolkit;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.ProgressMonitor;
 
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smackx.filetransfer.FileTransferListener;
@@ -12,10 +16,12 @@ import org.jivesoftware.smackx.filetransfer.IncomingFileTransfer;
 
 import client.Windows.ChatFrame;
 
-public class TransferListener implements FileTransferListener {
+public class TransferListener implements FileTransferListener, PropertyChangeListener {
 
 	ChatFrame parentFrame;
 	File recvFile;
+	ProgressTask task;
+	ProgressMonitor progressMonitor;
 	
 	public TransferListener( ChatFrame cf) {
 		parentFrame = cf;
@@ -71,6 +77,18 @@ public class TransferListener implements FileTransferListener {
               try {
           		System.out.println("Ajung sa primesc");
 				transfer.recieveFile( recvFile );
+				
+				
+	    		 task = new ProgressTask( transfer );
+	    		 task.addPropertyChangeListener(this);
+	    		 
+				 progressMonitor = new ProgressMonitor( null,
+                         "Receiving file ...",
+                         "", 0, 100);
+				 progressMonitor.setProgress(0);
+				 
+	    		 task.execute();
+				
 			} catch (XMPPException e) {
 				System.out.println("Error on receive:" + e.toString());
 				e.printStackTrace();
@@ -82,4 +100,23 @@ public class TransferListener implements FileTransferListener {
         }
 	}
 
+	public void propertyChange(PropertyChangeEvent evt) {
+        if ("progress" == evt.getPropertyName() ) {
+            int progress = (Integer) evt.getNewValue();
+            progressMonitor.setProgress(progress);
+            String message =
+            		String.format("Completed %d%%.\n", progress);
+            progressMonitor.setNote(message);
+            
+            if (progressMonitor.isCanceled() || task.isDone()) {
+                Toolkit.getDefaultToolkit().beep();
+                if (progressMonitor.isCanceled()) {
+                    task.cancel(true);
+            
+                } else {
+            
+                }
+            }
+        }
+    }
 }

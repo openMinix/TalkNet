@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Random;
+
 import javax.swing.*;
 
 import org.jivesoftware.smackx.filetransfer.FileTransferManager;
@@ -25,6 +27,9 @@ import client.Entities.Manager;
  *
  * @author Bianca
  */
+
+
+
 
 /**
  *  title = friend name or ID
