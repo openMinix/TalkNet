@@ -56,7 +56,9 @@ public class TransferListener implements FileTransferListener {
 	
 	@Override
 	public void fileTransferRequest(FileTransferRequest request ) {
-		 
+		
+		System.out.println("Am primit cerere");
+		
 		File recvFile = ShouldTransfer(request);
 		
         if( recvFile != null ) {
@@ -70,6 +72,7 @@ public class TransferListener implements FileTransferListener {
 			}
         } else {
               // Reject it
+        	System.out.println("Rject pe cerere");
               request.reject();
         }
 	}

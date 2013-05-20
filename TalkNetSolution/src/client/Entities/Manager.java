@@ -3,6 +3,8 @@ package client.Entities;
 import java.io.File;
 import java.util.HashMap;
 
+import javax.swing.JOptionPane;
+
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.ChatManager;
 import org.jivesoftware.smack.ChatManagerListener;
@@ -11,6 +13,7 @@ import org.jivesoftware.smack.Roster;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Presence;
+import org.jivesoftware.smackx.filetransfer.FileTransfer.Status;
 import org.jivesoftware.smackx.filetransfer.FileTransferManager;
 import org.jivesoftware.smackx.filetransfer.OutgoingFileTransfer;
 import org.jivesoftware.smackx.muc.MultiUserChat;
@@ -111,6 +114,26 @@ public class Manager {
 	      // Send the file
 	    try {
 			transfer.sendFile(file, "You won't believe this!");
+			int n= JOptionPane.showConfirmDialog(
+				    null,
+				    "Would you like to receive file?",
+				    "Incoming file!",
+				    JOptionPane.YES_NO_OPTION);
+			System.out.println("Am aparut lala " + n);
+			  while(!transfer.isDone()) {
+		            if(transfer.getStatus().equals(Status.error)) {
+		                  System.out.println("ERROR!!! " + transfer.getError());
+		            } else {
+		                  System.out.println(transfer.getStatus());
+		                  System.out.println(transfer.getProgress());
+		            }
+		            try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+		      }
 		} catch (XMPPException e) {
 			System.out.println("Send file exception." + e.toString());
 			e.printStackTrace();
