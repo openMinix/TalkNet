@@ -262,6 +262,16 @@ public class ConferenceFrame extends JFrame {
 
                 });
                 
+                btnInviteBuddy.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						new InviteBuddy(cm);
+						
+					}
+                	
+                });
+                
                
                
         }
