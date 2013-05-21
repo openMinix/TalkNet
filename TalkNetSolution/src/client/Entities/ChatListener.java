@@ -22,6 +22,10 @@ public class ChatListener implements ChatManagerListener {
 	          System.out.println("Received message: " 
 	            + (message != null ? chat1.getParticipant() + ": " +message.getBody() : "NULL"));
 	          
+	          /* If the message is an invitation, ignore it. */
+	          if (message.getBody().contains("@conference.127.0.0.1"))
+	        	  return;
+	          
 	          String from = message.getFrom().split("@")[0];
 	          System.out.println("from: " + from);
 	          ChatFrame cf = ((ChatFrame) Manager.getManager().chatWindows.get(from));
