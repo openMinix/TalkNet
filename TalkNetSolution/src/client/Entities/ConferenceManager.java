@@ -105,13 +105,10 @@ public class ConferenceManager {
 	}
 	
 	public void inviteUser(String user, String reason) {
-                try {
-                    muc.grantMembership(user);
+         
                     muc.invite(user, reason);
-                }
-                catch (XMPPException e) {
-                    System.out.println("Invite User: " + e.toString());
-                }
+
+           
 	}
 	
 	public void joinRoom() {
