@@ -272,6 +272,16 @@ public class ConferenceFrame extends JFrame {
                 	
                 });
                 
+                btnSetTopic.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						new ChangeTopic(cm, cfr);
+					}
+                	
+                });
+                
                
                
         }
@@ -309,5 +319,9 @@ public class ConferenceFrame extends JFrame {
         	pack();
         	 contentPane.repaint();
              contentPane.setVisible(true);
+        }
+        
+        public void setTopic(String topic) {
+        	setTitle("Topic is: " + topic);
         }
 }

@@ -146,4 +146,13 @@ public class ConferenceManager {
                 
                 return it;
         }
+        
+        public void setTopic(String topic) {
+        	try {
+				muc.changeSubject(topic);
+			} catch (XMPPException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        }
 }
