@@ -124,7 +124,7 @@ public class InviteFrame extends JFrame {
                             System.out.println(element.toString());
                             cf.getConferenceManager().inviteUser(element.toString(), "sadasas");
                         }
-                        
+                         
                         invfr.dispose();
                     }
                     

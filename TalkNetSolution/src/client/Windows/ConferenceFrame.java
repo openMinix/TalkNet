@@ -137,7 +137,8 @@ public class ConferenceFrame extends JFrame {
         
         public ConferenceFrame(String roomName, boolean initiated) {
                 
-            
+            	if (initiated)
+            		System.out.println("init");
                 cm = new ConferenceManager(roomName, this);
                 
                 if (initiated) {
@@ -156,8 +157,9 @@ public class ConferenceFrame extends JFrame {
                 
                 setBounds(new Rectangle(65, 24, 500, 400));
                 setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                setResizable(false);
-                setVisible(true);
+                // TODO: hack sa fie mereu fereastra deschisa, to solve
+                setResizable(true);
+                
 //              setBounds(65, 24, 500, 400);
                 contentPane = new JPanel();
                 contentPane.setBackground(UIManager.getColor("CheckBoxMenuItem.acceleratorForeground"));
@@ -259,6 +261,8 @@ public class ConferenceFrame extends JFrame {
                     }
 
                 });
+                
+               
                
         }
         
@@ -289,5 +293,11 @@ public class ConferenceFrame extends JFrame {
                 model.removeElement(user);
             }
             
+        }
+        
+        public void setVisible() {
+        	pack();
+        	 contentPane.repaint();
+             contentPane.setVisible(true);
         }
 }
