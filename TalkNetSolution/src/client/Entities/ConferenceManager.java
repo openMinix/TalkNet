@@ -76,7 +76,7 @@ public class ConferenceManager {
 						dialog.setBounds(100, 100, 275, 100);
 						dialog.getContentPane().setLayout(null);
 						contentPanel.setBackground(UIManager.getColor("CheckBoxMenuItem.acceleratorForeground"));
-						contentPanel.setBounds(0, 0, 273, 71);
+						contentPanel.setBounds(0, 0, 275, 100);
 						contentPanel.setLayout(null);
 						contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 						dialog.getContentPane().add(contentPanel);
