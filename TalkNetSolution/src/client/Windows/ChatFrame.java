@@ -42,6 +42,7 @@ public class ChatFrame extends JFrame {
         setTitle(title);
         
         JPanel general = new JPanel(new GridBagLayout());
+        general.setBackground(UIManager.getColor("CheckBoxMenuItem.acceleratorForeground"));
         
         convArea = new JTextArea(13,40);
         convArea.setMaximumSize(new Dimension(13,  40));
@@ -79,6 +80,7 @@ public class ChatFrame extends JFrame {
         
         
         JPanel menu = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        menu.setBackground(UIManager.getColor("CheckBoxMenuItem.acceleratorForeground"));
  
         sendFile = new JButton("Send file");
         startAudio = new JButton("Audio!");
@@ -86,6 +88,7 @@ public class ChatFrame extends JFrame {
         startAudio.addActionListener(new AudioListener());
         
         JPanel messPanel = new JPanel(new FlowLayout());
+        messPanel.setBackground(UIManager.getColor("CheckBoxMenuItem.acceleratorForeground"));
         
         
         GridBagConstraints c1 = new GridBagConstraints();

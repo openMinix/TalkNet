@@ -15,6 +15,7 @@ import client.Entities.ConnectionManager;
 import client.Entities.Login;
 import client.Entities.Manager;
 import client.Entities.Register;
+import client.Entities.ConferenceManager;
 
 /*
  * To change this template, choose Tools | Templates
@@ -58,6 +59,16 @@ public class LoginFrame extends JFrame{
         JPanel p2 = new JPanel(new FlowLayout());
         JPanel signupAction = new JPanel(new BorderLayout());
         JPanel general = new JPanel(new GridLayout(5,1));
+        general.setBackground(UIManager.getColor("CheckBoxMenuItem.acceleratorForeground"));
+        p1.setBackground(UIManager.getColor("CheckBoxMenuItem.acceleratorForeground"));
+        p2.setBackground(UIManager.getColor("CheckBoxMenuItem.acceleratorForeground"));
+        signupAction.setBackground(UIManager.getColor("CheckBoxMenuItem.acceleratorForeground"));
+        loginPanel.setBackground(UIManager.getColor("CheckBoxMenuItem.acceleratorForeground"));
+        passPanel.setBackground(UIManager.getColor("CheckBoxMenuItem.acceleratorForeground"));
+        userPanel.setBackground(UIManager.getColor("CheckBoxMenuItem.acceleratorForeground"));
+        credentials.setBackground(UIManager.getColor("CheckBoxMenuItem.acceleratorForeground"));
+        logo.setBackground(UIManager.getColor("CheckBoxMenuItem.acceleratorForeground"));
+        
         
         add(general);
         general.add(logo);
@@ -99,10 +110,15 @@ public class LoginFrame extends JFrame{
                 
 
                 JPanel general = new JPanel(new GridLayout(4, 1));
+                general.setBackground(UIManager.getColor("CheckBoxMenuItem.acceleratorForeground"));
                 JPanel p1 = new JPanel(new FlowLayout());
                 JPanel p2 = new JPanel(new FlowLayout());
                 JPanel p3 = new JPanel(new FlowLayout());
                 JPanel p4 = new JPanel(new FlowLayout());
+                p1.setBackground(UIManager.getColor("CheckBoxMenuItem.acceleratorForeground"));
+                p2.setBackground(UIManager.getColor("CheckBoxMenuItem.acceleratorForeground"));
+                p3.setBackground(UIManager.getColor("CheckBoxMenuItem.acceleratorForeground"));
+                p4.setBackground(UIManager.getColor("CheckBoxMenuItem.acceleratorForeground"));
                 
                 signupFrame.add(general);
                 general.add(p1);
@@ -157,12 +173,28 @@ public class LoginFrame extends JFrame{
                 String userID = jt1.getText();
                 String passwd = jt2.getText();
                 
+                /* Add userID for further use in ConferenceManager */
+                ConferenceManager.userID = userID;
+                
                 // TODO - Validate credentials
+                
+                if (userID.equals(""))
+                    JOptionPane.showMessageDialog(loginFrame,
+                        "No username specified!",
+                        "TalkNet warning",
+                          JOptionPane.WARNING_MESSAGE);
+                
+                else if (passwd.equals(""))
+                    JOptionPane.showMessageDialog(loginFrame,
+                        "No password specified!",
+                        "TalkNet warning",
+                          JOptionPane.WARNING_MESSAGE);
                 
                 //alext - launch mainframe
                 if ( userID.compareTo("") != 0 && passwd.compareTo("") != 0 ) {
                 	Point loc = loginFrame.getLocation();
-                	loginFrame.hide();
+                	//
+                        loginFrame.hide();
                 	
                 	MainFrame mf = new MainFrame(userID, passwd);
                 	mf.setLocation(loc);

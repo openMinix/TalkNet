@@ -16,14 +16,12 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import javax.swing.*;
+import org.jivesoftware.smackx.muc.*;
 
 import org.jivesoftware.smackx.muc.MultiUserChat;
 
-import client.Entities.ConnectionManager;
-import client.Entities.Login;
-import client.Entities.Logout;
-import client.Entities.Manager;
-import client.Entities.Register;
+import client.Entities.*;
+import static client.Windows.LoginFrame.loginFrame;
 
 /*
  * To change this template, choose Tools | Templates
@@ -62,9 +60,19 @@ public class MainFrame extends JFrame {
         		Manager.getManager().setStatus(true, "Avaiable");
         		isAuthed = true;
         	}
+                
+                LoginFrame.loginFrame.hide();
+                // add listener for conference invitation
+                MultiUserChat.addInvitationListener(ConnectionManager.connection, new ConferenceInvitationListener() ); 
+        
         }
         catch (Exception e) {
-        	System.out.println("MainFrame: Exception: " + e.toString());
+            JOptionPane.showMessageDialog(loginFrame,
+                  "Please make sure that your username and password are correct!",
+                  "TalkNet error",
+                    JOptionPane.ERROR_MESSAGE);
+          
+            
         }
     	
     	
@@ -358,7 +366,8 @@ class ItemAction implements ActionListener {
         }
         
         if ( command.equals(" Create conference ")){
-            System.out.println("conference");
+            InviteFrame invf = new InviteFrame();
+            
         }
     }
     
