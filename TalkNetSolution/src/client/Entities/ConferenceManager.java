@@ -1,6 +1,7 @@
 package client.Entities;
 
 import client.Windows.ConferenceFrame;
+
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -11,6 +12,7 @@ import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.Connection;
 import org.jivesoftware.smack.packet.*;
 import org.jivesoftware.smack.*;
+import org.jivesoftware.smackx.FormField;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -92,12 +94,42 @@ public class ConferenceManager {
 					}
                 	
                 });
+                
+                muc.addSubjectUpdatedListener(new SubjectUpdatedListener() {
+
+					@Override
+					public void subjectUpdated(String topic, String from) {
+						String user = from.substring(from.indexOf("/") + 1);
+						
+						frame.setTopic(topic);
+						frame.displayMessage("System", user + " set topic to: " + topic);
+						
+					}
+                	
+                });
 	}
 	
 	public void createRoom(String username) {
 		try {
 			muc.create(username);
-			muc.sendConfigurationForm(new Form(Form.TYPE_SUBMIT));
+			
+			// Get the the room's configuration form
+		      Form form = muc.getConfigurationForm();
+		      // Create a new form to submit based on the original form
+		      Form submitForm = form.createAnswerForm();
+		      // Add default answers to the form to submit
+		      for (Iterator fields = form.getFields(); fields.hasNext();) {
+		          FormField field = (FormField) fields.next();
+		          if (!FormField.TYPE_HIDDEN.equals(field.getType()) && field.getVariable() != null) {
+		              // Sets the default value as the answer
+		              submitForm.setDefaultAnswer(field.getVariable());
+		          }
+		      }
+		      
+		      /* Let any user change the conference topic. */	    
+		      submitForm.setAnswer("muc#roomconfig_changesubject", true);
+			
+			muc.sendConfigurationForm(submitForm);
 		}
 		catch (XMPPException e) {
 			System.out.println("Manager.Exception: " + e.toString());
