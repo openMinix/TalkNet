@@ -1,6 +1,9 @@
 package client.Entities;
 
 import client.Windows.ConferenceFrame;
+import java.awt.*;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import org.jivesoftware.smackx.muc.*;
 import org.jivesoftware.smackx.Form;
 import org.jivesoftware.smack.XMPPException;
@@ -63,6 +66,31 @@ public class ConferenceManager {
                             }
                             
                         });
+                muc.addInvitationRejectionListener(new InvitationRejectionListener() {
+
+					@Override
+					public void invitationDeclined(String invitee, String reason) {
+						JDialog dialog = new JDialog();
+						JPanel contentPanel = new JPanel();
+						
+						dialog.setBounds(100, 100, 275, 100);
+						dialog.getContentPane().setLayout(null);
+						contentPanel.setBackground(UIManager.getColor("CheckBoxMenuItem.acceleratorForeground"));
+						contentPanel.setBounds(0, 0, 273, 71);
+						contentPanel.setLayout(null);
+						contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+						dialog.getContentPane().add(contentPanel);
+						
+						JLabel lblUserDeclinedYour = new JLabel("User declined your invitation.");
+						lblUserDeclinedYour.setHorizontalAlignment(SwingConstants.CENTER);
+						lblUserDeclinedYour.setBounds(0, 23, 273, 15);
+						contentPanel.add(lblUserDeclinedYour);
+						
+						dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+						dialog.setVisible(true);
+					}
+                	
+                });
 	}
 	
 	public void createRoom(String username) {
