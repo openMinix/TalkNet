@@ -53,6 +53,8 @@ public class MainFrame extends JFrame {
         	//creates a connection with server
         	ConnectionManager cm = new ConnectionManager();
         	
+        	Thread.sleep(1000);
+        	
         	//Register reg = new Register("usertest3", "123456");
         	Login login1 = new Login();
         	login1.loginCredentials(user, passwd);
