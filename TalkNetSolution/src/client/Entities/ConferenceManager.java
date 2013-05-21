@@ -81,7 +81,8 @@ public class ConferenceManager {
 						contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 						dialog.getContentPane().add(contentPanel);
 						
-						JLabel lblUserDeclinedYour = new JLabel("User declined your invitation.");
+						String user = invitee.substring(0, invitee.indexOf("@"));
+						JLabel lblUserDeclinedYour = new JLabel(user + " declined your invitation.");
 						lblUserDeclinedYour.setHorizontalAlignment(SwingConstants.CENTER);
 						lblUserDeclinedYour.setBounds(0, 23, 273, 15);
 						contentPanel.add(lblUserDeclinedYour);
