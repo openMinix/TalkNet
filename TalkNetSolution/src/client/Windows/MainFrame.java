@@ -18,8 +18,6 @@ import java.awt.event.MouseMotionListener;
 import javax.swing.*;
 import org.jivesoftware.smackx.muc.*;
 
-import org.jivesoftware.smackx.muc.MultiUserChat;
-
 import client.Entities.*;
 import static client.Windows.LoginFrame.loginFrame;
 
@@ -369,7 +367,6 @@ class ItemAction implements ActionListener {
         
         if ( command.equals(" Create conference ")){
             InviteFrame invf = new InviteFrame();
-            
         }
     }
     

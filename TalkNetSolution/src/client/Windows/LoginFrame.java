@@ -59,6 +59,7 @@ public class LoginFrame extends JFrame{
         JPanel p2 = new JPanel(new FlowLayout());
         JPanel signupAction = new JPanel(new BorderLayout());
         JPanel general = new JPanel(new GridLayout(5,1));
+
         general.setBackground(UIManager.getColor("CheckBoxMenuItem.acceleratorForeground"));
         p1.setBackground(UIManager.getColor("CheckBoxMenuItem.acceleratorForeground"));
         p2.setBackground(UIManager.getColor("CheckBoxMenuItem.acceleratorForeground"));
@@ -110,11 +111,13 @@ public class LoginFrame extends JFrame{
                 
 
                 JPanel general = new JPanel(new GridLayout(4, 1));
+
                 general.setBackground(UIManager.getColor("CheckBoxMenuItem.acceleratorForeground"));
                 JPanel p1 = new JPanel(new FlowLayout());
                 JPanel p2 = new JPanel(new FlowLayout());
                 JPanel p3 = new JPanel(new FlowLayout());
                 JPanel p4 = new JPanel(new FlowLayout());
+
                 p1.setBackground(UIManager.getColor("CheckBoxMenuItem.acceleratorForeground"));
                 p2.setBackground(UIManager.getColor("CheckBoxMenuItem.acceleratorForeground"));
                 p3.setBackground(UIManager.getColor("CheckBoxMenuItem.acceleratorForeground"));

@@ -4,11 +4,18 @@ package client.Windows;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+
+import java.util.Random;
+
 import javax.swing.*;
+
+import org.jivesoftware.smackx.filetransfer.FileTransferManager;
+import org.jivesoftware.smackx.filetransfer.OutgoingFileTransfer;
 
 import client.Entities.Manager;
 
@@ -81,10 +88,10 @@ public class ChatFrame extends JFrame {
         
         JPanel menu = new JPanel(new FlowLayout(FlowLayout.LEFT));
         menu.setBackground(UIManager.getColor("CheckBoxMenuItem.acceleratorForeground"));
- 
+
         sendFile = new JButton("Send file");
         startAudio = new JButton("Audio!");
-        sendFile.addActionListener(new SendFileListener());
+        sendFile.addActionListener(new SendFileListener(this));
         startAudio.addActionListener(new AudioListener());
         
         JPanel messPanel = new JPanel(new FlowLayout());
@@ -155,12 +162,36 @@ class SendListener implements ActionListener {
 }
 
 class SendFileListener implements ActionListener {
+    ChatFrame parentFrame;
     
+    public SendFileListener( ChatFrame jf ) {
+    	super();
+    	this.parentFrame = jf;
+	}
     public void actionPerformed(ActionEvent e)
-            {
+    {
+    	
+    	JFileChooser jfc=new JFileChooser(".");
+    	jfc.setDialogTitle("Choose a file");
+    	parentFrame.add(jfc);
+    	jfc.setVisible(true);
+    	
+    	int returnValue = jfc.showOpenDialog( parentFrame);
+    	File selectedFile;
+    	if (returnValue == JFileChooser.APPROVE_OPTION) {
+    		selectedFile = jfc.getSelectedFile();
+    		
+    		System.out.println("Am selectat" + selectedFile + "si trimit la " + parentFrame.friendID );
+    		    		
+    		Manager manager = Manager.getManager();
+    	      // Create the outgoing file transfer
+    	    manager.sendFile( selectedFile,parentFrame.friendID + "@127.0.0.1/Smack");
+    	    
+    	}	
                 //Execute when button is pressed
-                System.out.println("SendFile button not implemented yet!");
-            }
+    	
+              //  System.out.println("SendFile button not implemented yet!");
+    }
 }
 
 class AudioListener implements ActionListener {
