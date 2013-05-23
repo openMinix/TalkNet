@@ -7,20 +7,26 @@ import java.io.File;
 import java.util.HashMap;
 
 
+import javax.swing.JOptionPane;
 import javax.swing.ProgressMonitor;
 
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.ChatManager;
 import org.jivesoftware.smack.ChatManagerListener;
+import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.Roster;
 import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smack.filter.PacketFilter;
+import org.jivesoftware.smack.filter.PacketTypeFilter;
 import org.jivesoftware.smack.packet.Message;
+import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.packet.Presence;
 
 import org.jivesoftware.smackx.filetransfer.FileTransferManager;
 import org.jivesoftware.smackx.filetransfer.FileTransferNegotiator;
 import org.jivesoftware.smackx.filetransfer.OutgoingFileTransfer;
 import org.jivesoftware.smackx.muc.MultiUserChat;
+import org.jivesoftware.smackx.pubsub.PresenceState;
 
 import client.Windows.ChatFrame;
 
@@ -48,6 +54,8 @@ public class Manager implements PropertyChangeListener  {
 	private Manager() {
 		//alext - defeat instances
 		roster = ConnectionManager.connection.getRoster();
+		roster.setSubscriptionMode(Roster.SubscriptionMode.manual);
+		
 		chatManager = ConnectionManager.connection.getChatManager();
 		messageListener = new ChatListener();
 		chatManager.addChatListener(messageListener);
@@ -60,6 +68,41 @@ public class Manager implements PropertyChangeListener  {
 		chatWindows = new HashMap<String, ChatFrame>();
 		data = new String[10000];//fail
 		nr_friends = 0;
+		
+	
+		PacketFilter filter = new PacketTypeFilter( Presence.class);
+		
+		PacketListener myListener = new PacketListener() {
+	        public void processPacket(Packet packet) {
+	        	
+	        	Presence p = (Presence) packet;
+	        	String from = p.getFrom();
+	        	
+	        	if ( p.getType() == Presence.Type.subscribe )
+	        	{
+	        		int n= JOptionPane.showConfirmDialog(
+	        			    null,
+	        			    "Would you like to add " + p.getFrom() + " ?",
+	        			    "Incoming friend!",
+	        			    JOptionPane.YES_NO_OPTION);
+	        		
+	        		if ( n == JOptionPane.YES_OPTION )
+	        		{        			
+	        			   Presence response = new Presence(Presence.Type.subscribed);
+	                       response.setTo( from );
+	                       ConnectionManager.connection.sendPacket(response);
+	        		} else
+	        		{
+	        			Presence response = new Presence(Presence.Type.unsubscribed);
+	                    response.setTo( from );
+	                    ConnectionManager.connection.sendPacket(response);
+	        		}
+	        	}
+	        }
+	    };
+	    
+	// Register the listener.
+	    ConnectionManager.connection.addPacketListener(myListener, filter);
 	}
 	
 	//alext - return always the same instance
@@ -91,7 +134,7 @@ public class Manager implements PropertyChangeListener  {
 	public void createEntry(String user, String name ) {
 		try {
 			if ( roster == null )
-				System.out.println("mortii matii");
+				System.out.println("mortii ma-tii");
 			roster.createEntry(user, name, null);
 		}
 		catch (Exception e) {
