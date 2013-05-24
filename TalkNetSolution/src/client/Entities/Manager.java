@@ -5,7 +5,11 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 
 import javax.swing.JOptionPane;
@@ -17,6 +21,7 @@ import org.jivesoftware.smack.ChatManagerListener;
 import org.jivesoftware.smack.PacketCollector;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.Roster;
+import org.jivesoftware.smack.RosterEntry;
 import org.jivesoftware.smack.SmackConfiguration;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.filter.PacketFilter;
@@ -254,40 +259,68 @@ public class Manager implements PropertyChangeListener  {
 	//alext - return friends of user authed
 	//alext - TODO - bind with roster
 	public String[] getFriends() {
-		String[] myData = new String[nr_friends+1];
-		for ( int i = 0 ; i < nr_friends ; i ++ )
-			myData[i] = data[i];
-		myData[nr_friends] = null;
-		return myData;
+		
+		/* Get all entries in roster. */
+        Collection<RosterEntry> entries = roster.getEntries();
+        Iterator<RosterEntry> it = entries.iterator();
+
+        int i;
+
+        SortedSet<String> list = new TreeSet<String>();
+
+        /* Get friends' names. */
+        while (it.hasNext())
+            list.add(it.next().getUser().split("@")[0]);
+
+        String[] friends = new String[list.size()];
+
+        for (i = 0; i < list.size(); i++)
+            friends[i] = list.first();
+
+        return friends;
+
 	}
 	
 	//alext - TODO - bind with roster
 	public void addFriend( String name ) {
 		
-		Manager manager = Manager.getManager();
-	    System.out.println("createEntry: " + name);
-	    manager.clean();//alext - clean manager between new login
-	    
-	    //try {
-			manager.createEntry(name +"@127.0.0.1" , name);
-		//} catch (XMPPException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-		//}
+		StringBuffer userID = new StringBuffer(name);
+        userID.append("@127.0.0.1");
+
+        Presence subscribe = new Presence(Presence.Type.subscribe);
+        subscribe.setTo(userID.toString());
+        ConnectionManager.connection.sendPacket(subscribe);
+        
 	}
 	
 	// alext  - TODO - bind with roster
 	public void deleteFriend (String name ) {
-		int pos = -1;
-		for (int i = 0 ; i < nr_friends ; i ++)  {
-			if ( name.compareTo(data[i]) == 0 ) {
-				pos = i;
-			}
-		}
-		for ( int i = pos ; i < nr_friends - 1; i ++)
-			data[i] = data[i+1];
-		nr_friends--;
-		data[nr_friends] = null;
+		/* Set user ID. */
+        StringBuffer userID = new StringBuffer(name);
+        userID.append("@127.0.0.1");
+
+        /* Get all entries in roster. */
+        Collection<RosterEntry> friends = roster.getEntries();
+        Iterator<RosterEntry> it = friends.iterator();
+
+        while (it.hasNext()) {
+            RosterEntry entry = it.next();
+            System.out.println("got " + entry.getUser() + " and " + userID.toString());
+            String username = entry.getUser().split("@")[0];
+            if (name.equals(username))
+                try {
+                    roster.removeEntry(entry);
+                    System.out.println("deleted " + userID);
+                } catch (XMPPException e) {
+                    e.printStackTrace();
+                }
+        }
+
+        /* Unsubscribe. */
+        Presence unsubscribed = new Presence(Presence.Type.unsubscribed);
+        unsubscribed.setTo(userID.toString());
+        ConnectionManager.connection.sendPacket(unsubscribed);
+
 	}
 	
 	//alext - very important
