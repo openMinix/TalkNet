@@ -149,6 +149,12 @@ public class LoginFrame extends JFrame{
                         String newPass = tf2.getText();
                         String passCopy = tf3.getText();
                         
+                        if (newPass.compareTo(passCopy) != 0) {
+                            JOptionPane.showMessageDialog(ChatFrame.chat,
+                "Passwords must match!",
+                 "Error",
+                JOptionPane.ERROR_MESSAGE);
+                        }
                         //alext - register new user to server
                         if ( newUser.compareTo("") != 0 && newPass.compareTo("")!= 0
                         	&& passCopy.compareTo("")!= 0 && newPass.compareTo(passCopy) == 0) {
@@ -156,6 +162,12 @@ public class LoginFrame extends JFrame{
                         	
                         	ConnectionManager cm = new ConnectionManager();
                         	Register newUserReg = new Register(newUser, newPass);
+                                
+                                JOptionPane.showMessageDialog(ChatFrame.chat,
+                "You're account has been created."
+                                        + "You can now login to TalkNet!",
+                "Account confirmation",
+                JOptionPane.INFORMATION_MESSAGE);
                     	
                         }
                         
