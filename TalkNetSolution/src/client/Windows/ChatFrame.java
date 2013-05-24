@@ -39,6 +39,7 @@ public class ChatFrame extends JFrame {
     JTextArea convArea;
     JTextArea messageArea;
     JButton send, sendFile, startAudio;
+    static ChatFrame chat;
     
     
     Manager manager;
@@ -47,6 +48,7 @@ public class ChatFrame extends JFrame {
     	
         friendID = title;
         setTitle(title);
+        chat = this;
         
         JPanel general = new JPanel(new GridBagLayout());
         general.setBackground(UIManager.getColor("CheckBoxMenuItem.acceleratorForeground"));
@@ -198,8 +200,10 @@ class AudioListener implements ActionListener {
     
     public void actionPerformed(ActionEvent e)
             {
-                //Execute when button is pressed
-                System.out.println("Audio button not implemented yet!");
+                JOptionPane.showMessageDialog(ChatFrame.chat,
+                "Not yet implemented.",
+                "Note",
+                JOptionPane.INFORMATION_MESSAGE);
             }
 }
 

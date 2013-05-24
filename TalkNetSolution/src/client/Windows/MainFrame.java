@@ -20,6 +20,8 @@ import org.jivesoftware.smackx.muc.*;
 
 import client.Entities.*;
 import static client.Windows.LoginFrame.loginFrame;
+import java.awt.Color;
+import javax.swing.border.EmptyBorder;
 
 /*
  * To change this template, choose Tools | Templates
@@ -30,176 +32,201 @@ import static client.Windows.LoginFrame.loginFrame;
  *
  * @author Bianca
  */
+
 public class MainFrame extends JFrame {
-    String userID;
-    String passwd;
-    Manager manager;
-    
-    
-    public static JList friendList;
-    JLabel hello;
-    JLabel spaceBibi;
-    MenuBar menu;
-    public static JScrollPane jsp;
-    public static JPanel general;
-    public static JFrame up;
-    
-    public MainFrame(String user, String passwd){
-    	
-    	boolean isAuthed =  false;
-    	try {
-        	//creates a connection with server
-        	ConnectionManager cm = new ConnectionManager();
-        	
-        	Thread.sleep(1000);
-        	
-        	//Register reg = new Register("usertest3", "123456");
-        	Login login1 = new Login();
-        	login1.loginCredentials(user, passwd);
-        	if ( ConnectionManager.connection.isAuthenticated() ) {
-        		Manager.getManager().setStatus(true, "Avaiable");
-        		isAuthed = true;
-        	}
-                
-                LoginFrame.loginFrame.hide();
-                // add listener for conference invitation
-                MultiUserChat.addInvitationListener(ConnectionManager.connection, new ConferenceInvitationListener() ); 
-        
-        }
-        catch (Exception e) {
-            JOptionPane.showMessageDialog(loginFrame,
-                  "Please make sure that your username and password are correct!",
-                  "TalkNet error",
-                    JOptionPane.ERROR_MESSAGE);
-          
+
+	//private JPanel contentPane;
+        String userID;
+        String passwd;
+        Manager manager;
+
+
+        public static JList friendList;
+        JLabel hello;
+        MenuBar menuBar;
+        public static JScrollPane jsp;
+        public static JPanel general;
+        public static JFrame up;
+
+	/**
+	 * Create the frame.
+	 */
+	public MainFrame(String user, String passwd) {
             
-        }
-    	
-    	
-    	if(isAuthed == false ) {
-    		LoginFrame.loginFrame.show();
-    		return ;
-    	}
-    	
-    	menu = new MenuBar();
-        
-        general = new JPanel(new BorderLayout());
-        Menu talkNet = new Menu(" TalkNet ");
-        MenuItem logout = new MenuItem(" LogOut ");
-        MenuItem exit = new MenuItem(" Exit ");
-        talkNet.add(logout);
-        talkNet.addSeparator ();
-        talkNet.add(exit);
-        
-        Menu contacts = new Menu (" Contacts ");
-        MenuItem add = new MenuItem( " Add Friend ");
-        MenuItem delete = new MenuItem(" Delete Friend ");
-        MenuItem ignore = new MenuItem(" Ignore Friend ");
-        contacts.add(add);
-        contacts.addSeparator ();
-        contacts.add(delete);
-        contacts.addSeparator ();
-        contacts.add(ignore);
-        
-        Menu conference = new Menu (" Conference ");
-        MenuItem createConf = new MenuItem(" Create conference ");
-        conference.add(createConf);
-        
-        Menu help = new Menu( "Help" );
-        
-        //add Action liteners on menu items
-        logout.addActionListener(new ItemAction());
-        exit.addActionListener(new ItemAction());
-        add.addActionListener(new ItemAction());
-        delete.addActionListener(new ItemAction());
-        ignore.addActionListener(new ItemAction());
-        createConf.addActionListener(new ItemAction());
-        menu.add( talkNet );
-        menu.add( contacts );
-        menu.add( conference );
-        menu.add( help );
-        
-        setMenuBar(menu);
-    	
-    	
-    	manager = Manager.getManager();
-        setTitle("TalkNet");
-        userID = user;
-        this.passwd = passwd;
-       
-        
-        friendList = new JList(manager.getFriends());
+                boolean isAuthed =  false;
+                try {
+                        //creates a connection with server
+                        ConnectionManager cm = new ConnectionManager();
 
-        friendList.addMouseListener(new MouseListener() {
+                        Thread.sleep(1000);
 
-            @Override
-            public void mouseClicked(MouseEvent me) {
+                        //Register reg = new Register("usertest3", "123456");
+                        Login login1 = new Login();
+                        login1.loginCredentials(user, passwd);
+                        if ( ConnectionManager.connection.isAuthenticated() ) {
+                                Manager.getManager().setStatus(true, "Avaiable");
+                                isAuthed = true;
+                        }
 
-                if (manager.chatWindows.get(friendList.getSelectedValue().toString()) == null ) {
-                	ChatFrame fr = new ChatFrame(friendList.getSelectedValue().toString());
-                	manager.chatWindows.put(friendList.getSelectedValue().toString(), fr);
+                        LoginFrame.loginFrame.hide();
+                        // add listener for conference invitation
+                        MultiUserChat.addInvitationListener(ConnectionManager.connection, new ConferenceInvitationListener() ); 
+
                 }
-                else 
-                	manager.chatWindows.get(friendList.getSelectedValue().toString()).show();
-                System.out.println("map: " + friendList.getSelectedValue().toString()+". "+manager.chatWindows.size());
-            }
+                catch (Exception e) {
+                    JOptionPane.showMessageDialog(loginFrame,
+                          "Please make sure that your username and password are correct!",
+                          "TalkNet error",
+                            JOptionPane.ERROR_MESSAGE);
 
-            @Override
-            public void mousePressed(MouseEvent me) { }
 
-            @Override
-            public void mouseReleased(MouseEvent me) { }
+                }
+                
+                if(isAuthed == false ) {
+                    LoginFrame.loginFrame.show();
+                    return ;
+                }
 
-            @Override
-            public void mouseEntered(MouseEvent me) { }
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 350, 500);
+		
+		menuBar = new MenuBar();
+		setMenuBar(menuBar);
+		
+		Menu talkNet = new Menu(" TalkNet ");
+		menuBar.add(talkNet);
+		
+		MenuItem logout = new MenuItem(" LogOut ");
+		talkNet.add(logout);
+		
+		talkNet.addSeparator();
+		
+		MenuItem exit = new MenuItem(" Exit ");
+		talkNet.add(exit);
+		
+		Menu contacts = new Menu(" Contacts ");
+		menuBar.add(contacts);
+		
+		MenuItem add = new MenuItem(" Add Friend ");
+		contacts.add(add);
+		
+		contacts.addSeparator();
+		
+		MenuItem delete = new MenuItem(" Delete Friend ");
+		contacts.add(delete);
+		
+		JSeparator separator_2 = new JSeparator();
+		contacts.addSeparator();
+		
+		MenuItem ignore = new MenuItem(" Ignore Friend ");
+		contacts.add(ignore);
+		
+		Menu conference = new Menu(" Conference ");
+		menuBar.add(conference);
+		
+		MenuItem createConf = new MenuItem(" Create conference ");
+		conference.add(createConf);
+		
+		Menu help = new Menu(" Help ");
+		menuBar.add(help);
+                
+                MenuItem helpItem = new MenuItem(" Help ");
+                help.add(helpItem);
+                
+                //add Action liteners on menu items
+                logout.addActionListener(new ItemAction());
+                exit.addActionListener(new ItemAction());
+                add.addActionListener(new ItemAction());
+                delete.addActionListener(new ItemAction());
+                ignore.addActionListener(new ItemAction());
+                createConf.addActionListener(new ItemAction());
+                helpItem.addActionListener(new ItemAction());
+               
+                manager = Manager.getManager();
+                setTitle("TalkNet");
+                userID = user;
+                this.passwd = passwd;
+                
+                
+                friendList = new JList(manager.getFriends());
 
-            @Override
-            public void mouseExited(MouseEvent me) { }
-            
-        });
-        //friendList.setSize(270, 400);
-        
-        jsp = new JScrollPane(friendList, 
-                ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        
-        hello = new JLabel("Hello, " + userID + "!");
-        hello.setFont(new Font("Arial", Font.BOLD, 24));
-        
-        spaceBibi = new JLabel(" ");
-        JPanel jp = new JPanel(new GridLayout(2, 1));
-        
-        add(general);
-       
-        general.add(jp, BorderLayout.NORTH);
-        jp.add(hello);
-        jp.add(spaceBibi);
-        
-        general.add(jsp, BorderLayout.CENTER);
-        
-        setSize(340, 500);
-        setVisible(true);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-        up = this;
+                friendList.addMouseListener(new MouseListener() {
 
-    }
-    
-    //alext - update display list with data from manager
+                    @Override
+                    public void mouseClicked(MouseEvent me) {
+
+                        if (manager.chatWindows.get(friendList.getSelectedValue().toString()) == null ) {
+                                ChatFrame fr = new ChatFrame(friendList.getSelectedValue().toString());
+                                manager.chatWindows.put(friendList.getSelectedValue().toString(), fr);
+                        }
+                        else 
+                                manager.chatWindows.get(friendList.getSelectedValue().toString()).show();
+                        System.out.println("map: " + friendList.getSelectedValue().toString()+". "+manager.chatWindows.size());
+                    }
+
+                    @Override
+                    public void mousePressed(MouseEvent me) { }
+
+                    @Override
+                    public void mouseReleased(MouseEvent me) { }
+
+                    @Override
+                    public void mouseEntered(MouseEvent me) { }
+
+                    @Override
+                    public void mouseExited(MouseEvent me) { }
+
+                });
+                
+                /*ImageIcon image = new ImageIcon("glossy.png");
+                JLabel imageLabel = new JLabel(image);
+                imageLabel.setBounds(270, 24, 60, 60);
+              */  
+                
+		general = new JPanel();
+		general.setBackground(UIManager.getColor("CheckBoxMenuItem.acceleratorForeground"));
+		general.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(general);
+		general.setLayout(null);
+		
+		JLabel lblHelloFriend = new JLabel("Hello, " + userID + "!");
+		lblHelloFriend.setBounds(10, 24, 314, 33);
+		lblHelloFriend.setFont(new Font("Lucida Calligraphy", Font.BOLD, 24));
+		general.add(lblHelloFriend);
+                ////general.add(imageLabel);		
+		JLabel label = new JLabel("Buddies");
+		label.setBounds(30, 84, 65, 24);
+		label.setForeground(Color.BLACK);
+		label.setFont(new Font("Arial Black", Font.BOLD, 13));
+		general.add(label);
+		
+		jsp = new JScrollPane(friendList, 
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                
+                jsp.setBounds(30, 108, 275, 323);
+		general.add(jsp);
+                
+                up = this;
+                setVisible(true);
+                setResizable(false);
+	}
+        
+          
+  
     public static void updatePanel() {
     	System.out.println("updatePanel: " + Manager.getManager().data[0]);
-    	general.remove(1);
+    	general.remove(jsp);
     	friendList.setListData(Manager.getManager().getFriends());
     	jsp = new JScrollPane(friendList, 
-                ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-    	
-    	general.add(jsp, BorderLayout.CENTER);
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                
+        jsp.setBounds(30, 108, 275, 323);
+        general.add(jsp);
     	up.show();
     }
-
 }
-
 
 class ItemAction implements ActionListener {
 
@@ -219,6 +246,9 @@ class ItemAction implements ActionListener {
             JPanel general = new JPanel(new BorderLayout());
             JPanel simple1 = new JPanel(new FlowLayout());
             JPanel simple2 = new JPanel(new FlowLayout());
+            general.setBackground(UIManager.getColor("CheckBoxMenuItem.acceleratorForeground"));
+            simple1.setBackground(UIManager.getColor("CheckBoxMenuItem.acceleratorForeground"));
+            simple2.setBackground(UIManager.getColor("CheckBoxMenuItem.acceleratorForeground"));
             
             addFrame.add(general);
             general.add(action, BorderLayout.NORTH);
@@ -268,6 +298,9 @@ class ItemAction implements ActionListener {
             JPanel general = new JPanel(new BorderLayout());
             JPanel simple1 = new JPanel(new FlowLayout());
             JPanel simple2 = new JPanel(new FlowLayout());
+            general.setBackground(UIManager.getColor("CheckBoxMenuItem.acceleratorForeground"));
+            simple1.setBackground(UIManager.getColor("CheckBoxMenuItem.acceleratorForeground"));
+            simple2.setBackground(UIManager.getColor("CheckBoxMenuItem.acceleratorForeground"));
             
             deleteFrame.add(general);
             general.add(action, BorderLayout.NORTH);
@@ -305,7 +338,7 @@ class ItemAction implements ActionListener {
         
         if ( command.equals(" Ignore Friend ")){
             final JDialog ignoreFrame = new JDialog();
-            JLabel action = new JLabel("An irritating one, huh? Simply ignore his messages!");
+            JLabel action = new JLabel("An irritating one, huh? Simply ignore his messages!\n\n");
             JLabel frndID = new JLabel("Friend ID");
             final JTextField tf = new JTextField(20);
             JButton ignore = new JButton(" Ignore ");
@@ -314,6 +347,9 @@ class ItemAction implements ActionListener {
             JPanel general = new JPanel(new BorderLayout());
             JPanel simple1 = new JPanel(new FlowLayout());
             JPanel simple2 = new JPanel(new FlowLayout());
+            general.setBackground(UIManager.getColor("CheckBoxMenuItem.acceleratorForeground"));
+            simple1.setBackground(UIManager.getColor("CheckBoxMenuItem.acceleratorForeground"));
+            simple2.setBackground(UIManager.getColor("CheckBoxMenuItem.acceleratorForeground"));
             
             ignoreFrame.add(general);
             general.add(action, BorderLayout.NORTH);
@@ -368,6 +404,15 @@ class ItemAction implements ActionListener {
         if ( command.equals(" Create conference ")){
             InviteFrame invf = new InviteFrame();
         }
+        
+        if ( command.equals(" Help ")){
+            JOptionPane.showMessageDialog(ChatFrame.chat,
+                "Having questions or problems?\nContact our account administrator at "
+                    + "admin@talknet.ro",
+                "Help",
+                JOptionPane.INFORMATION_MESSAGE);
+        }
+        
     }
     
 }
