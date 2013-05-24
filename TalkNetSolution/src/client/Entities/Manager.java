@@ -4,6 +4,7 @@ import java.awt.Toolkit;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.util.Arrays;
 import java.util.HashMap;
 
 
@@ -98,13 +99,22 @@ public class Manager implements PropertyChangeListener  {
 	        			   Presence response = new Presence(Presence.Type.subscribed);
 	                       response.setTo( from );
 	                       ConnectionManager.connection.sendPacket(response);
+	                       
+	                       Manager manager = Manager.getManager();
+	                       
+	                       String name = from.split("@")[0];
+	                       
+	                       if ( !Arrays.asList( manager.data).contains(name) )
+	                       {
+	                    	   manager.addFriend(name);
+	                       }
 	        		} else
 	        		{
 	        			Presence response = new Presence(Presence.Type.unsubscribed);
 	                    response.setTo( from );
 	                    ConnectionManager.connection.sendPacket(response);
 	        		}
-	        	} else if ( p.getType() == Presence.Type.subscribed )
+	        	} else if ( p.	getType() == Presence.Type.subscribed )
 	        	{
 	        		System.out.println("Primite DsubscribeD");
 	        		Presence response = new Presence(Presence.Type.available);
@@ -114,9 +124,10 @@ public class Manager implements PropertyChangeListener  {
 	                Manager manager = Manager.getManager();
 	                
 	        		System.out.println("add: " + from);
-	        		manager.data[nr_friends] = from.split(":")[0];
-	        		MainFrame.updatePanel();
+	        		manager.data[nr_friends] = from.split("@")[0];
 	        		nr_friends ++;
+	        		MainFrame.updatePanel();
+	        		
 	        	} else if ( p.getType() == Presence.Type.available)
 	        	{
 	        		System.out.println("Primrire av");
@@ -170,36 +181,7 @@ public class Manager implements PropertyChangeListener  {
 	}
 	
 	
-	public void createEntry(String user, String name, String [] groups) throws XMPPException {
-        // Create and send roster entry creation packet.
-        RosterPacket rosterPacket = new RosterPacket();
-        rosterPacket.setType(IQ.Type.SET);
-        RosterPacket.Item item = new RosterPacket.Item(user, name);
-       
-        rosterPacket.addRosterItem(item);
-        // Wait up to a certain number of seconds for a reply from the server.
-        PacketCollector collector = ConnectionManager.connection.createPacketCollector(
-                new PacketIDFilter(rosterPacket.getPacketID()));
-        ConnectionManager.connection.sendPacket(rosterPacket);
-        IQ response = (IQ)collector.nextResult(SmackConfiguration.getPacketReplyTimeout());
-        if (response == null) {
-        	System.out.println("Niciun raspuns");
-            throw new XMPPException("No response from the server.");
-        }
-        // If the server replied with an error, throw an exception.
-        else if (response.getType() == IQ.Type.ERROR) {
-        	System.out.println("Raspuns eroare");
-            throw new XMPPException(response.getError());
-        }
-        
-        System.out.println("Raspuns bun");
-        collector.cancel();
-
-        // Create a presence subscription packet and send.
-        Presence presencePacket = new Presence(Presence.Type.subscribe);
-        presencePacket.setTo(user);
-        ConnectionManager.connection.sendPacket(presencePacket);
-    }
+	
 	
 	
 	//alext - send a message to toBuddy
@@ -286,12 +268,12 @@ public class Manager implements PropertyChangeListener  {
 	    System.out.println("createEntry: " + name);
 	    manager.clean();//alext - clean manager between new login
 	    
-	    try {
-			manager.createEntry(name +"@127.0.0.1" , name, null);
-		} catch (XMPPException e) {
+	    //try {
+			manager.createEntry(name +"@127.0.0.1" , name);
+		//} catch (XMPPException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			//e.printStackTrace();
+		//}
 	}
 	
 	// alext  - TODO - bind with roster
