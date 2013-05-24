@@ -34,6 +34,7 @@ import org.jivesoftware.smackx.muc.MultiUserChat;
 import org.jivesoftware.smackx.pubsub.PresenceState;
 
 import client.Windows.ChatFrame;
+import client.Windows.MainFrame;
 
 
 
@@ -114,6 +115,7 @@ public class Manager implements PropertyChangeListener  {
 	                
 	        		System.out.println("add: " + from);
 	        		manager.data[nr_friends] = from.split(":")[0];
+	        		MainFrame.updatePanel();
 	        		nr_friends ++;
 	        	} else if ( p.getType() == Presence.Type.available)
 	        	{
