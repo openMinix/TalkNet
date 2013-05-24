@@ -295,7 +295,7 @@ public class Manager implements PropertyChangeListener  {
         	Presence p = roster.getPresence(list.first() + "@127.0.0.1");
         	String profile = list.first() ;
         	if( p != null )
-        		profile += " " + p.getMode() + " \"" + p.getStatus() + "\""; 
+        		profile += " " + (p.getMode() !=null? p.getMode():"") + " \"" + p.getStatus() + "\""; 
             friends[i] = list.first();
             list.remove(friends[i]);
             
