@@ -80,6 +80,7 @@ public class Manager implements PropertyChangeListener  {
 	        	
 	        	if ( p.getType() == Presence.Type.subscribe )
 	        	{
+	        		System.out.println("Primite subscribe");
 	        		int n= JOptionPane.showConfirmDialog(
 	        			    null,
 	        			    "Would you like to add " + p.getFrom() + " ?",
@@ -87,7 +88,7 @@ public class Manager implements PropertyChangeListener  {
 	        			    JOptionPane.YES_NO_OPTION);
 	        		
 	        		if ( n == JOptionPane.YES_OPTION )
-	        		{        			
+	        		{   
 	        			   Presence response = new Presence(Presence.Type.subscribed);
 	                       response.setTo( from );
 	                       ConnectionManager.connection.sendPacket(response);
@@ -97,6 +98,24 @@ public class Manager implements PropertyChangeListener  {
 	                    response.setTo( from );
 	                    ConnectionManager.connection.sendPacket(response);
 	        		}
+	        	} else if ( p.getType() == Presence.Type.subscribed)
+	        	{
+	        		System.out.println("Primite DsubscribeD");
+	        		Presence response = new Presence(Presence.Type.available);
+	                response.setTo( from );
+	                ConnectionManager.connection.sendPacket(response);
+	                
+	                Manager manager = Manager.getManager();
+	                
+	        		System.out.println("add: " + from);
+	        		manager.data[nr_friends] = from.split(":")[0];
+	        		nr_friends ++;
+	        	} else if ( p.getType() == Presence.Type.available)
+	        	{
+	        		System.out.println("Primrire av");
+	        	} else 
+	        	{
+	        		System.out.println("ERROR Primire " + p.getType());
 	        	}
 	        }
 	    };
@@ -221,9 +240,12 @@ public class Manager implements PropertyChangeListener  {
 	
 	//alext - TODO - bind with roster
 	public void addFriend( String name ) {
-		System.out.println("add: " + name);
-		this.data[nr_friends] = name;
-		nr_friends ++;
+		
+		Manager manager = Manager.getManager();
+	    System.out.println("createEntry: " + name);
+	    manager.clean();//alext - clean manager between new login
+	    
+	    manager.createEntry(name , name);
 	}
 	
 	// alext  - TODO - bind with roster

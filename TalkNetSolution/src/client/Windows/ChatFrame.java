@@ -153,10 +153,12 @@ public class ChatFrame extends JFrame {
         
         //alext - not sure if is best place
         //alext - but now it works
+        /*
         manager = Manager.getManager();
         System.out.println("createEntry: " + friendID);
         manager.clean();//alext - clean manager between new login
         manager.createEntry(friendID, friendID);
+        */
     }
     
     //alext - displayMessage in current object chatFrame
