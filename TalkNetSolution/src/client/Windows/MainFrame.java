@@ -16,12 +16,18 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import javax.swing.*;
+
+import org.jivesoftware.smack.Roster;
+import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smackx.muc.*;
 
 import client.Entities.*;
 import static client.Windows.LoginFrame.loginFrame;
 import java.awt.Color;
+
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
 /*
  * To change this template, choose Tools | Templates
@@ -198,6 +204,27 @@ public class MainFrame extends JFrame {
 		lblHelloFriend.setBounds(10, 24, 314, 33);
 		lblHelloFriend.setFont(new Font("Lucida Calligraphy", Font.BOLD, 24));
 		general.add(lblHelloFriend);
+		
+		JTextField statusField = new JTextField("Set status here", 20);
+		statusField.setBackground( Color.LIGHT_GRAY);
+		statusField.setBounds(85, 60, 200, 22);
+		Border b = new LineBorder( Color.darkGray, 3, false);
+		statusField.setBorder(b);
+		general.add(statusField);
+		
+		statusField.addActionListener( new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				
+				System.out.println( ConnectionManager.connection.getUser() );
+				
+				Roster roster = ConnectionManager.connection.getRoster();
+				Presence p = roster.getPresence( ConnectionManager.connection.getUser());
+				p.setStatus( event.getActionCommand());
+				ConnectionManager.connection.sendPacket( p );
+			}
+		});
                 ////general.add(imageLabel);		
 		JLabel label = new JLabel("Buddies");
 		label.setBounds(30, 84, 65, 24);
@@ -212,9 +239,9 @@ public class MainFrame extends JFrame {
                 jsp.setBounds(30, 108, 275, 323);
 		general.add(jsp);
                 
-                up = this;
-                setVisible(true);
-                setResizable(false);
+        up = this;
+        setVisible(true);
+        setResizable(false);
 	}
         
           
