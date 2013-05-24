@@ -22,6 +22,7 @@ import org.jivesoftware.smack.PacketCollector;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.Roster;
 import org.jivesoftware.smack.RosterEntry;
+import org.jivesoftware.smack.RosterListener;
 import org.jivesoftware.smack.SmackConfiguration;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.filter.PacketFilter;
@@ -68,6 +69,21 @@ public class Manager implements PropertyChangeListener  {
 		roster = ConnectionManager.connection.getRoster();
 		roster.setSubscriptionMode(Roster.SubscriptionMode.manual);
 		
+		roster.addRosterListener(new RosterListener() {
+		    // Ignored events public void entriesAdded(Collection<String> addresses) {}
+		    public void entriesDeleted(Collection<String> addresses) {}
+		    public void entriesUpdated(Collection<String> addresses) {}
+		    public void presenceChanged(Presence presence) {
+		    	
+		    System.out.println("Presence changed: " + presence.getFrom() + " " + presence);
+		    MainFrame.updatePanel();
+		    }
+			@Override
+			public void entriesAdded(Collection<String> arg0) {
+				System.out.println("aDDED " + arg0);
+			}
+		});
+		
 		chatManager = ConnectionManager.connection.getChatManager();
 		messageListener = new ChatListener();
 		chatManager.addChatListener(messageListener);
@@ -82,7 +98,7 @@ public class Manager implements PropertyChangeListener  {
 		nr_friends = 0;
 		
 	
-		PacketFilter filter = new PacketTypeFilter( Presence.class);
+		PacketFilter filter = new PacketTypeFilter( Presence.class );
 		
 		PacketListener myListener = new PacketListener() {
 	        public void processPacket(Packet packet) {
@@ -275,8 +291,13 @@ public class Manager implements PropertyChangeListener  {
         String[] friends = new String[list.size()];
 
         for (i = 0; i < list.size(); i++) {
+        	
+        	Presence p = roster.getPresence(list.first() + "@127.0.0.1");
+        	String profile = list.first() + " "+ p.getMode() + " \"" + p.getStatus() + "\""; 
             friends[i] = list.first();
             list.remove(friends[i]);
+            
+            friends[i] = profile;
         }
 
         return friends;
