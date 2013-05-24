@@ -287,15 +287,17 @@ public class Manager implements PropertyChangeListener  {
         /* Get friends' names. */
         while (it.hasNext())
             list.add(it.next().getUser().split("@")[0]);
-
-        String[] friends = new String[list.size()];
-
-        for (i = 0; i < list.size(); i++) {
-        	
-        	Presence p = roster.getPresence(list.first() + "@127.0.0.1");
-        	String profile = list.first() ;
-        	if( p != null )
-        		profile += " " + (p.getMode() !=null? p.getMode():"") + " \"" + p.getStatus() + "\""; 
+	
+	        String[] friends = new String[list.size()];
+	
+	        for (i = 0; i < list.size(); i++) {
+	        	
+	        	Presence p = roster.getPresence(list.first() + "@127.0.0.1");
+	        	String profile = list.first() ;
+	        	if( p != null )
+	        	{
+	        		profile += " " + (p.getMode() !=null? p.getMode():"") + (p.getStatus() != null?" \"" + p.getStatus() + "\"":"Offline"); 
+        	}
             friends[i] = list.first();
             list.remove(friends[i]);
             
