@@ -75,7 +75,8 @@ public class Manager implements PropertyChangeListener  {
 		    public void entriesUpdated(Collection<String> addresses) {}
 		    public void presenceChanged(Presence presence) {
 		    	
-		    System.out.println("Presence changed: " + presence.getFrom() + " " + presence);
+		    System.out.println("Presence changed: " + presence.getFrom() + " |" + presence.getStatus());
+		    System.out.println("Presence changed: " + presence.getFrom() + " |" + presence);
 		    MainFrame.updatePanel();
 		    }
 			@Override

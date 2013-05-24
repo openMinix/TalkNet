@@ -15,11 +15,15 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+
+import javax.net.ssl.SSLEngineResult.Status;
 import javax.swing.*;
 
 import org.jivesoftware.smack.Roster;
 import org.jivesoftware.smack.packet.Presence;
+import org.jivesoftware.smack.packet.Presence.Mode;
 import org.jivesoftware.smackx.muc.*;
+import org.jivesoftware.smackx.pubsub.PresenceState;
 
 import client.Entities.*;
 import static client.Windows.LoginFrame.loginFrame;
@@ -217,12 +221,17 @@ public class MainFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				
-				System.out.println( ConnectionManager.connection.getUser() );
 				
 				Roster roster = ConnectionManager.connection.getRoster();
 				Presence p = roster.getPresence( ConnectionManager.connection.getUser());
 				p.setStatus( event.getActionCommand());
+				p.setMode( Mode.available);
+				
+				p.setType( Presence.Type.available);
+				System.out.println( "Trimit statusul |" + p.getStatus() );
+				System.out.println( "Trimit prezenta |" + p );
 				ConnectionManager.connection.sendPacket( p );
+			
 			}
 		});
                 ////general.add(imageLabel);		
