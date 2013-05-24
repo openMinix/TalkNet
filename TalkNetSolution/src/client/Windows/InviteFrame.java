@@ -10,12 +10,15 @@ package client.Windows;
  */
 
 import client.Entities.ConferenceManager;
+import client.Entities.Manager;
 import client.Windows.ConferenceFrame;
 import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.TreeSet;
+
 import javax.swing.border.EmptyBorder;
  
 public class InviteFrame extends JFrame {
@@ -58,8 +61,16 @@ public class InviteFrame extends JFrame {
                 scrollPane_1.setBounds(27, 37, 92, 222);
                 contentPane.add(scrollPane_1);
                
-                model.addElement("bubulina");
-                model.addElement("tina");
+                TreeSet<String> friends;
+                
+                friends = Manager.getManager().friends();
+                
+                int i;
+                for (i = 0; i < friends.size(); i++) {
+                	String buddy = friends.first();
+                	model.addElement(buddy);
+                	friends.remove(buddy);
+                }
                 
                 list = new JList(model);
                 scrollPane_1.setViewportView(list);

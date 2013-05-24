@@ -15,7 +15,7 @@ public class ConferenceInvitationListener implements InvitationListener {
         // Reject the invitation
         System.out.println("Received invitation from user " + inviter + "   " + room);
         final JDialog popup = new JDialog();
-        JLabel action = new JLabel(inviter + "invites you to join conference.");
+        JLabel action = new JLabel(inviter + " invites you to join conference.");
         JButton accept = new JButton(" Accept ");
         JButton decline = new JButton(" Decline ");
         

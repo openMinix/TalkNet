@@ -274,10 +274,30 @@ public class Manager implements PropertyChangeListener  {
 
         String[] friends = new String[list.size()];
 
-        for (i = 0; i < list.size(); i++)
+        for (i = 0; i < list.size(); i++) {
             friends[i] = list.first();
+            list.remove(friends[i]);
+        }
 
         return friends;
+
+	}
+	
+public TreeSet<String> friends() {
+		
+		/* Get all entries in roster. */
+        Collection<RosterEntry> entries = roster.getEntries();
+        Iterator<RosterEntry> it = entries.iterator();
+
+        int i;
+
+        TreeSet<String> list = new TreeSet<String>();
+
+        /* Get friends' names. */
+        while (it.hasNext())
+            list.add(it.next().getUser().split("@")[0]);
+        
+        return list;
 
 	}
 	
@@ -286,10 +306,12 @@ public class Manager implements PropertyChangeListener  {
 		
 		StringBuffer userID = new StringBuffer(name);
         userID.append("@127.0.0.1");
+        
+    	Manager.getManager().createEntry(name +"@127.0.0.1" , name);
 
-        Presence subscribe = new Presence(Presence.Type.subscribe);
-        subscribe.setTo(userID.toString());
-        ConnectionManager.connection.sendPacket(subscribe);
+    //    Presence subscribe = new Presence(Presence.Type.subscribe);
+   //     subscribe.setTo(userID.toString());
+    //    ConnectionManager.connection.sendPacket(subscribe);
         
 	}
 	

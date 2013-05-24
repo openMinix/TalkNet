@@ -155,13 +155,16 @@ public class MainFrame extends JFrame {
                     @Override
                     public void mouseClicked(MouseEvent me) {
 
-                        if (manager.chatWindows.get(friendList.getSelectedValue().toString()) == null ) {
+                    		if (friendList.getSelectedValue() != null) {
+                    	
+                    		if (manager.chatWindows.get(friendList.getSelectedValue().toString()) == null ) {
                                 ChatFrame fr = new ChatFrame(friendList.getSelectedValue().toString());
                                 manager.chatWindows.put(friendList.getSelectedValue().toString(), fr);
-                        }
-                        else 
+                        	}
+                        	else 
                                 manager.chatWindows.get(friendList.getSelectedValue().toString()).show();
-                        System.out.println("map: " + friendList.getSelectedValue().toString()+". "+manager.chatWindows.size());
+                        	System.out.println("map: " + friendList.getSelectedValue().toString()+". "+manager.chatWindows.size());
+                    	}
                     }
 
                     @Override
