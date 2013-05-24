@@ -2,6 +2,10 @@ package client.Windows;
 
 
 import java.awt.*;
+import org.jivesoftware.smack.Chat;
+import org.jivesoftware.smack.ChatManager;
+import org.jivesoftware.smack.XMPPException;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -14,9 +18,11 @@ import java.util.Random;
 
 import javax.swing.*;
 
+import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smackx.filetransfer.FileTransferManager;
 import org.jivesoftware.smackx.filetransfer.OutgoingFileTransfer;
 
+import client.Entities.ConnectionManager;
 import client.Entities.Manager;
 
 /*
@@ -41,10 +47,15 @@ public class ChatFrame extends JFrame {
     JButton send, sendFile, startAudio;
     static ChatFrame chat;
     
+    Chat chatChannel;
     
     Manager manager;
     
     public ChatFrame(String title) {
+    	
+    	chatChannel = ConnectionManager.connection.getChatManager().createChat(title + "@127.0.0.1/Spark 2.6.3", null);
+    	
+    	System.out.println(title + "@127.0.0.1/Spark 2.6.3");
     	
         friendID = title;
         setTitle(title);
@@ -82,7 +93,13 @@ public class ChatFrame extends JFrame {
                 convArea.setText(convArea.getText() + "\n" + 
                          "Me (" + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) 
                         + "): " + message);
-                manager.sendMessage(message, friendID + "@127.0.0.1/Spark 2.6.3");
+             //   manager.sendMessage(message, friendID + "@127.0.0.1/Spark 2.6.3");
+                try {
+					chatChannel.sendMessage(message);
+				} catch (XMPPException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
             }
         
         });
