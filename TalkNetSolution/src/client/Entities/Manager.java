@@ -12,6 +12,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 
+import javax.net.ssl.SSLEngineResult.Status;
 import javax.swing.JOptionPane;
 import javax.swing.ProgressMonitor;
 
@@ -32,6 +33,7 @@ import org.jivesoftware.smack.packet.IQ;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.packet.Presence;
+import org.jivesoftware.smack.packet.Presence.Mode;
 import org.jivesoftware.smack.packet.RosterPacket;
 
 import org.jivesoftware.smackx.filetransfer.FileTransferManager;
@@ -120,9 +122,12 @@ public class Manager implements PropertyChangeListener  {
 	        		{   
 	        			   Presence response = new Presence(Presence.Type.subscribed);
 	                       response.setTo( from );
+	                       
+	                       
 	                       ConnectionManager.connection.sendPacket(response);
 	                       
 	                       Manager manager = Manager.getManager();
+	                       
 	                       
 	                       String name = from.split("@")[0];
 	                       
@@ -139,8 +144,15 @@ public class Manager implements PropertyChangeListener  {
 	        	} else if ( p.	getType() == Presence.Type.subscribed )
 	        	{
 	        		System.out.println("Primite DsubscribeD");
+	        		
+	        		
+					
 	        		Presence response = new Presence(Presence.Type.available);
+	        		
 	                response.setTo( from );
+	                response.setMode( Mode.available);
+					response.setType( Presence.Type.available);
+					
 	                ConnectionManager.connection.sendPacket(response);
 	                
 	                Manager manager = Manager.getManager();
@@ -192,8 +204,6 @@ public class Manager implements PropertyChangeListener  {
 	//alext - add user in roster's user authed
 	public void createEntry(String user, String name ) {
 		try {
-			if ( roster == null )
-				System.out.println("mortii ma-tii");
 			System.out.println("Apelez create entry");
 			roster.createEntry(user, name, null);
 		}
@@ -287,23 +297,38 @@ public class Manager implements PropertyChangeListener  {
 
         /* Get friends' names. */
         while (it.hasNext())
+        {
             list.add(it.next().getUser().split("@")[0]);
-	
-	        String[] friends = new String[list.size()];
-	
-	        for (i = 0; i < list.size(); i++) {
-	        	
-	        	Presence p = roster.getPresence(list.first() + "@127.0.0.1");
-	        	String profile = list.first() ;
-	        	if( p != null )
-	        	{
-	        		profile += " " + (p.getMode() !=null? p.getMode():"") + (p.getStatus() != null?" \"" + p.getStatus() + "\"":"Offline"); 
-        	}
-            friends[i] = list.first();
-            list.remove(friends[i]);
-            
-            friends[i] = profile;
         }
+        
+	    String[] friends = new String[list.size()];
+	
+	    int size = list.size();
+	    
+	    for (i = 0; i < size; i++) {
+	        	
+	    	Presence p = roster.getPresence(list.first() + "@127.0.0.1");
+	        String profile = list.first() ;
+	        if( p != null )
+	        {
+	        	profile += " " + (p.getMode() !=null? p.getMode():"");
+	        	if  ( p.isAvailable())
+	        	{
+	        		if (p.getStatus() != null )
+	        		profile += (" \"" + p.getStatus() + "\"");
+	        		
+	        		else profile +=( " \"" +"Available" +" \"" );
+	        	} else
+	        	{
+	        		profile += "Offline";
+	        	}
+	        }
+	        	
+           friends[i] = list.first();
+           list.remove(friends[i]);
+            
+           friends[i] = profile;
+	     }
 
         return friends;
 
